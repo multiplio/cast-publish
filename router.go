@@ -1,13 +1,18 @@
 package main
 
 import (
+	"github.com/mongodb/mongo-go-driver/mongo"
 	"github.com/qiangxue/fasthttp-routing"
 )
 
-func setRoutes(router *routing.Router) {
+type serverContext struct {
+	users *mongo.Collection
+}
 
-	router.Get("/twitter/<hash>", func(context *routing.Context) error {
-		return handleTwitter(context)
+func setRoutes(router *routing.Router, sc *serverContext) {
+
+	router.Get("/twitter/<user>/<post>", func(context *routing.Context) error {
+		return sc.handleTwitter(context)
 	})
 
 }
