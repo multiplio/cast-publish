@@ -1,0 +1,43 @@
+sudo: required
+
+env:
+  global:
+    - PROJECT_NAME=tekwrks
+    - DOCKER_IMAGE_NAME=publish
+    - GO111MODULE=on
+
+language: go
+go:
+  - "1.11.4"
+
+# Cache Gcloud SDK between commands
+cache:
+  directories:
+    - "$HOME/google-cloud-sdk/"
+
+services:
+  - docker
+
+before_script:
+  - env GO111MODULE=on make test
+
+script:
+  - env GO111MODULE=on make image
+
+before_deploy:
+  - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash >/dev/null; fi
+  - source /home/travis/google-cloud-sdk/path.bash.inc
+  - gcloud --quiet version
+  - gcloud --quiet components update
+  - git clone https://github.com/tekwrks/MANAGE
+
+deploy:
+  - provider: script
+    script: chmod 500 ./MANAGE/gcloud/push.sh && ./MANAGE/gcloud/push.sh
+    skip_cleanup: true
+    on:
+      branch: master
+
+notifications:
+  slack:
+    secure: nlicYm3QrX2lNyidXmuXn+LsDIIk5XtHTZfPzqZ5MdiB6cDUoN012xBT5+cKAp66MAv4JHa2tTdfJTsDvDfKB5MX470LKAhV9nbLGn+42Da9sAQbJLIle22Ax+3vbzkzjE8KmkCHAG+QN0iX6hp2oqCEMGFSkoKKTPfP0Iwna7NzsAMpzdambpP2BfPx6wyBtwUdRihxdsvnAH0evE8dxn90ewc2LM46qKXBnJTSNLqxYoA2s5JaRTW42vO9JIlw5191tlOL9dqFO2ezj2Xe8Jt0InNvDw+TlAcTmV47plbhGMAH2zqO/c7u79b2VPckFS0bL3qpuBZSFwJcjCbI4ehtmVbN/X+npyjWYU9ToUwr4Y5zoWlieTxe7PrxUaYQNc+2v/OL5Qtxscy9a2+/3ZO6NxzfpuGC9ZEUPDfkRghBUxEuzKM3oE6C5k79cA2sGFn/vEzWEThtWTmI3iD9kIkcqdavWssUUlgN1wAx52sU6A88UIZG8/ZjsSfvfHx6CGwBMkRzYba7suBvjSiJRfZW/YhG4+FNlWT5yU8Oro5dSo0r34XEazUU6om99BCYaIxnJwi1cQusolTD8EkN6WRVr2NPel5fE6rezEVzVHeQYjfIfah6C1FdLb4glamB/qXWeVuXj5kTmn2ESl4KCzgbqrNLz3mTmOyiV+nH5i4=
