@@ -16,23 +16,23 @@ func (sc *serverContext) handleTwitter(c *routing.Context) error {
 	// get params
 	userID := c.Param("user")
 	if userID == "" {
-		log.Println("user missing")
+		log.Println("twitter", "user missing")
 		return routing.NewHTTPError(400, "No user.")
 	}
 	postID := c.Param("post")
 	if postID == "" {
-		log.Println("post missing")
+		log.Println("twitter", "post missing")
 		return routing.NewHTTPError(400, "No post.")
 	}
 
-	log.Println("got userID :", userID, "and postID :", postID)
+	log.Println("twitter", "got userID :", userID, "and postID :", postID)
 
 	// get post
 
 	// get user secret and token
 	userOID, err := primitive.ObjectIDFromHex(userID)
 	if err != nil {
-		log.Println("could not convert", userID, "into ObjectID")
+		log.Println("twitter", "could not convert", userID, "into ObjectID")
 		return routing.NewHTTPError(400, "Invalid user.")
 	}
 
@@ -45,16 +45,24 @@ func (sc *serverContext) handleTwitter(c *routing.Context) error {
 	filter := bson.M{"_id": userOID}
 	err = sc.users.FindOne(context.Background(), filter).Decode(&user)
 	if err != nil {
-		log.Println("could not find user", userID)
+		log.Println("twitter", "could not find user", userID)
 		return routing.NewHTTPError(400, "Invalid user.")
 	}
 
 	// auth with twitter
-	client, err = authTwitter(&environment.Twitter.Key, &environment.Twitter.Secret, &user.Twitter.Token, &user.Twitter.Secret)
+	client, err := authTwitter(&environment.Twitter.Key, &environment.Twitter.Secret, &user.Twitter.Token, &user.Twitter.Secret)
 	if err != nil {
-		log.Println("could not authenticate", userID)
+		log.Println("twitter", "could not authenticate", userID)
 		return routing.NewHTTPError(400, "Invalid user.")
 	}
+
+	// post to twitter
+	tweet, _, err := client.Statuses.Update("Hello World", nil)
+	if err != nil {
+		log.Println("twitter", "could not post", userID)
+		return routing.NewHTTPError(400, "Invalid user.")
+	}
+	log.Println("twitter", "posted", tweet)
 
 	return nil
 }
