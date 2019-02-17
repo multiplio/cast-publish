@@ -22,6 +22,7 @@ type environmentDesc struct {
 
 	Users struct {
 		Name     string `env:"DATABASE_NAME"`
+		Protocol string `env:"DATABASE_PROTOCOL"`
 		Address  string `env:"DATABASE_ADDRESS"`
 		Options  string `env:"DATABASE_OPTIONS"`
 		User     string `env:"DATABASE_USER"`
@@ -43,7 +44,7 @@ func main() {
 	log.SetPrefix(environment.Alias + ":")
 
 	// server context
-	connectionString := `mongodb://` + environment.Users.Name + `:` + environment.Users.Password + `@` + environment.Users.Address + `/` + environment.Users.Name
+	connectionString := environment.Users.Protocol + `://` + environment.Users.User + `:` + environment.Users.Password + `@` + environment.Users.Address + `/` + environment.Users.Name
 	if environment.Users.Options != "" {
 		connectionString += `?` + environment.Users.Options
 	}
