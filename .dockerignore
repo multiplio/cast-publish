@@ -1,0 +1,15 @@
+.git
+
+Dockerfile
+.dockerignore
+.gitignore
+
+*.md
+.travis.yml
+Makefile
+
+.env
+**/*.env
+
+**/*.vim
+**/.DS_Store
