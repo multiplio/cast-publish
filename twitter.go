@@ -27,8 +27,6 @@ func (sc *serverContext) handleTwitter(c *routing.Context) error {
 
 	log.Println("twitter", "got userID :", userID, "and postID :", postID)
 
-	// get post
-
 	// get user secret and token
 	userOID, err := primitive.ObjectIDFromHex(userID)
 	if err != nil {
@@ -56,8 +54,11 @@ func (sc *serverContext) handleTwitter(c *routing.Context) error {
 		return routing.NewHTTPError(400, "Invalid user.")
 	}
 
+	// compose message
+	message := environment.PostURL + postID
+
 	// post to twitter
-	tweet, _, err := client.Statuses.Update("Hello World", nil)
+	tweet, _, err := client.Statuses.Update(message, nil)
 	if err != nil {
 		log.Println("twitter", "could not post", userID)
 		return routing.NewHTTPError(400, "Invalid user.")

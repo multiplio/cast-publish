@@ -15,6 +15,8 @@ type environmentDesc struct {
 	Alias   string `env:"PROGRAM_ALIAS"`
 	Address string `env:"ADDRESS"`
 
+	PostURL string `env:"POST_URL"`
+
 	Twitter struct {
 		Key    string `env:"TWITTER_CONSUMER_KEY"`
 		Secret string `env:"TWITTER_CONSUMER_SECRET"`
