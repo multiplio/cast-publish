@@ -8,7 +8,7 @@ env:
 
 language: go
 go:
-  - "1.11.4"
+  - "1.12"
 
 # Cache Gcloud SDK between commands
 cache:
