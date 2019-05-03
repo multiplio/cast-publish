@@ -1,5 +1,5 @@
 # Builder
-FROM golang:1.11.4 as builder
+FROM golang:1.12 as builder
 
 WORKDIR /build
 
@@ -20,7 +20,7 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 
 WORKDIR /app/
-COPY --from=builder /go/bin/publish .
+COPY --from=builder /go/bin/cast-publish .
 
 EXPOSE 3000
-ENTRYPOINT ["/app/publish"]
+ENTRYPOINT ["/app/cast-publish"]

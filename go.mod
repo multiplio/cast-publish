@@ -1,4 +1,4 @@
-module github.com/tekwrks/publish
+module github.com/multiplio/cast-publish
 
 require (
 	github.com/Netflix/go-env v0.0.0-20180529183433-1e80ef5003ef
