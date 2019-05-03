@@ -1,3 +1,3 @@
-# social media publisher
+# publish
 
-[![Build Status](https://travis-ci.org/tekwrks/publish.svg?branch=master)](https://travis-ci.org/tekwrks/publish)
+[![Build Status](https://travis-ci.org/multiplio/cast-publish.svg?branch=master)](https://travis-ci.org/multiplio/cast-publish)
