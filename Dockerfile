@@ -20,7 +20,7 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 
 WORKDIR /app/
-COPY --from=builder /go/bin/publish .
+COPY --from=builder /go/bin/cast-publish .
 
 EXPOSE 3000
-ENTRYPOINT ["/app/publish"]
+ENTRYPOINT ["/app/cast-publish"]

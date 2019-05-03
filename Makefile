@@ -1,5 +1,5 @@
-project=tekwrks
-name=publish
+project=multipl
+name=cast-publish
 
 .PHONY:all
 all: build image

@@ -12,4 +12,3 @@ Makefile
 **/*.env
 
 **/*.vim
-**/.DS_Store
