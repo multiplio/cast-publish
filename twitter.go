@@ -55,13 +55,13 @@ func (sc *serverContext) handleTwitter(c *routing.Context) error {
 	}
 
 	// compose message
-	message := environment.PostURL + postID
+	message := environment.PostURL + postID + "\n"
 
 	// post to twitter
 	tweet, _, err := client.Statuses.Update(message, nil)
 	if err != nil {
 		log.Println("twitter", "could not post", userID)
-		return routing.NewHTTPError(400, "Invalid user.")
+		return routing.NewHTTPError(400, "Could not update twitter status.")
 	}
 	log.Println("twitter", "posted", tweet)
 
